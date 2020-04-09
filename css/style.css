@@ -155,13 +155,13 @@ div.ac > ul.tag > li:before {
   vertical-align: middle;
   transition: margin-left 0.5s;
 }
-.shang_box .shang_payimg .pay_img.weixin_img {
+.shang_box .shang_payimg .pay_img.alipay_img {
   margin-left: -280px;
 }
 .shang_box .shang_payimg .pay_img img {
   width: 255px;
 }
-.shang_box .shang_payimg .pay_img img.weixin {
+.shang_box .shang_payimg .pay_img img.alipay {
   margin: auto 0 auto 16px;
   display: block;
   float: right;
@@ -2078,7 +2078,7 @@ img.pswp__img {
   .shang_box .shang_payimg .pay_img {
     width: 427px;
   }
-  .shang_box .shang_payimg .pay_img.weixin_img {
+  .shang_box .shang_payimg .pay_img.alipay_img {
     margin-left: -227px;
   }
   .shang_box .shang_payimg .pay_img img {
@@ -2118,7 +2118,7 @@ font-size
   .shang_box .shang_payimg .pay_img {
     width: 324px;
   }
-  .shang_box .shang_payimg .pay_img.weixin_img {
+  .shang_box .shang_payimg .pay_img.alipay_img {
     margin-left: -174px;
   }
   .shang_box .shang_payimg .pay_img img {
