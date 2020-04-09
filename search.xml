@@ -5,10 +5,10 @@
     
     <entry>
       <title>Spring IOC和DI的概念</title>
-      <link href="/2020/04/09/demo/"/>
-      <url>/2020/04/09/demo/</url>
+      <link href="/2020/04/09/Spring%20IOC%E5%92%8CDI%E7%9A%84%E6%A6%82%E5%BF%B5/"/>
+      <url>/2020/04/09/Spring%20IOC%E5%92%8CDI%E7%9A%84%E6%A6%82%E5%BF%B5/</url>
       
-        <content type="html"><![CDATA[<h1 id="IOC和DI的概念"><a href="#IOC和DI的概念" class="headerlink" title="IOC和DI的概念"></a>IOC和DI的概念</h1><ul><li><p>IOC：Inverse of Control，控制反转，将对象的创建反转给spring</p></li><li><p>DI：Dependency Injection，依赖注入，在spring框架负责创建Bean对象时，动态的将对象注入到Bean组件</p></li></ul><h2 id="Spring-IoC总览"><a href="#Spring-IoC总览" class="headerlink" title="Spring IoC总览`"></a>Spring IoC总览`</h2><p>Spring<code>的</code>IoC`容器在实现控制反转和依赖注入的过程中,可以划分为两个阶段:</p><ul><li>容器启动阶段</li><li><code>Bean</code>实例化阶段</li></ul><p>这两个阶段中,<code>IoC</code>容器分别作了以下这些事情:</p><img src="/2020/04/09/demo/1.webp" class title="This is an test image"><p><code>Spring</code>中提供了两种<code>IoC</code>容器：</p><ul><li><code>BeanFactory</code></li><li><code>ApplicationContext</code></li></ul><p>这两个容器间的关系如下图：</p><img src="/2020/04/09/demo/2.jpg" class title="This is an test image"><p> 我们可以看到，<code>ApplicationContext</code>是<code>BeanFactory</code>的子类，所以，<code>ApplicationContext</code>可以看做更强大的<code>BeanFactory</code>，他们两个之间的区别如下：</p><ul><li><code>BeanFactory</code>。基础类型<code>IoC容器</code>，提供完整的<code>IoC</code>服务支持。如果没有特殊指定，默认采用延迟初始化策略（<code>lazy-load</code>）。只有当客户端对象需要访问容器中的某个受管对象的时候，才对该受管对象进行初始化以及依赖注入操作。所以，相对来说，容器启动初期速度较快，所需要的资源有限。对于资源有限，并且功能要求不是很严格的场景，<code>BeanFactory</code>是比较合适的<code>IoC容器</code>选择。</li><li><code>ApplicationContext</code>。<code>ApplicationContext</code>在<code>BeanFactory</code>的基础上构建，是相对比较高级的容器实现，除了拥有<code>BeanFactory</code>的所有支持，<code>ApplicationContext</code>还提供了其他高级特性，比如事件发布、国际化信息支持等，<code>ApplicationContext</code>所管理的对象，在该类型容器启动之后，默认全部初始化并绑定完成。所以，相对于<code>BeanFactory</code>来说，<code>ApplicationContext</code>要求更多的系统资源，同时，因为在启动时就完成所有初始化，容<br> 器启动时间较之<code>BeanFactory</code>也会长一些。在那些系统资源充足，并且要求更多功能的场景中，<code>ApplicationContext</code>类型的容器是比较合适的选择。</li></ul><p>四种方式：</p><ul><li>通过最基本的文本文件来记录被注入对象和其依赖对象之间的对应关系</li><li><strong>通过描述性较强的XML文件格式来记录对应信息</strong></li><li>通过编写代码的方式来注册这些对应信息</li><li><strong>通过注解方式来注册这些对应信息</strong></li></ul><h2 id="Spring-IoC优势"><a href="#Spring-IoC优势" class="headerlink" title="Spring IoC优势"></a>Spring IoC优势</h2><p>AOP抽象、事务抽象、事件扩展、SPI扩展、强大的第三方整合、易测试性、更好的面向对象</p><h2 id="Spring-Ioc容器启动时做了哪些准备？"><a href="#Spring-Ioc容器启动时做了哪些准备？" class="headerlink" title="Spring Ioc容器启动时做了哪些准备？"></a><strong>Spring Ioc容器启动时做了哪些准备？</strong></h2><p>IoC配置元信息读取和解析、容器生命周期、Spring事件发布、国际化等。</p><h2 id="bean的依赖注入DI"><a href="#bean的依赖注入DI" class="headerlink" title="bean的依赖注入DI"></a>bean的依赖注入DI</h2><p>DI存在两个主要变体：基于有参构造注入和基于Setter注入。</p><figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment">//有参构造</span></span><br><span class="line"><span class="keyword">public</span> <span class="class"><span class="keyword">class</span> <span class="title">SimpleMovieLister</span> </span>&#123;</span><br><span class="line"></span><br><span class="line">    <span class="keyword">private</span> MovieFinder movieFinder;</span><br><span class="line"></span><br><span class="line">    <span class="function"><span class="keyword">public</span> <span class="title">SimpleMovieLister</span><span class="params">(MovieFinder movieFinder)</span> </span>&#123;</span><br><span class="line">        <span class="keyword">this</span>.movieFinder = movieFinder;</span><br><span class="line">    &#125;</span><br><span class="line">&#125;</span><br><span class="line"><span class="comment">//基于Setter注入</span></span><br><span class="line"><span class="keyword">public</span> <span class="class"><span class="keyword">class</span> <span class="title">SimpleMovieLister</span> </span>&#123;</span><br><span class="line"></span><br><span class="line">    <span class="keyword">private</span> MovieFinder movieFinder;</span><br><span class="line"></span><br><span class="line">    <span class="function"><span class="keyword">public</span> <span class="keyword">void</span> <span class="title">setMovieFinder</span><span class="params">(MovieFinder movieFinder)</span> </span>&#123;</span><br><span class="line">        <span class="keyword">this</span>.movieFinder = movieFinder;</span><br><span class="line">    &#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure><h2 id="bean的自动装配"><a href="#bean的自动装配" class="headerlink" title="bean的自动装配"></a>bean的自动装配</h2><p> @Autowire按照类型装配和@Resource按照名称装配的注解</p>]]></content>
+        <content type="html"><![CDATA[<h1 id="IOC和DI的概念"><a href="#IOC和DI的概念" class="headerlink" title="IOC和DI的概念"></a>IOC和DI的概念</h1><ul><li><p>IOC：Inverse of Control，控制反转，将对象的创建反转给spring</p></li><li><p>DI：Dependency Injection，依赖注入，在spring框架负责创建Bean对象时，动态的将对象注入到Bean组件</p></li></ul><h2 id="Spring-IoC总览"><a href="#Spring-IoC总览" class="headerlink" title="Spring IoC总览`"></a>Spring IoC总览`</h2><p>Spring<code>的</code>IoC`容器在实现控制反转和依赖注入的过程中,可以划分为两个阶段:</p><ul><li>容器启动阶段</li><li><code>Bean</code>实例化阶段</li></ul><p>这两个阶段中,<code>IoC</code>容器分别作了以下这些事情:</p><img src="/2020/04/09/Spring%20IOC%E5%92%8CDI%E7%9A%84%E6%A6%82%E5%BF%B5/1.webp" class title="This is an test image"><p><code>Spring</code>中提供了两种<code>IoC</code>容器：</p><ul><li><code>BeanFactory</code></li><li><code>ApplicationContext</code></li></ul><p>这两个容器间的关系如下图：</p><img src="/2020/04/09/Spring%20IOC%E5%92%8CDI%E7%9A%84%E6%A6%82%E5%BF%B5/2.jpg" class title="This is an test image"><p> 我们可以看到，<code>ApplicationContext</code>是<code>BeanFactory</code>的子类，所以，<code>ApplicationContext</code>可以看做更强大的<code>BeanFactory</code>，他们两个之间的区别如下：</p><ul><li><code>BeanFactory</code>。基础类型<code>IoC容器</code>，提供完整的<code>IoC</code>服务支持。如果没有特殊指定，默认采用延迟初始化策略（<code>lazy-load</code>）。只有当客户端对象需要访问容器中的某个受管对象的时候，才对该受管对象进行初始化以及依赖注入操作。所以，相对来说，容器启动初期速度较快，所需要的资源有限。对于资源有限，并且功能要求不是很严格的场景，<code>BeanFactory</code>是比较合适的<code>IoC容器</code>选择。</li><li><code>ApplicationContext</code>。<code>ApplicationContext</code>在<code>BeanFactory</code>的基础上构建，是相对比较高级的容器实现，除了拥有<code>BeanFactory</code>的所有支持，<code>ApplicationContext</code>还提供了其他高级特性，比如事件发布、国际化信息支持等，<code>ApplicationContext</code>所管理的对象，在该类型容器启动之后，默认全部初始化并绑定完成。所以，相对于<code>BeanFactory</code>来说，<code>ApplicationContext</code>要求更多的系统资源，同时，因为在启动时就完成所有初始化，容<br> 器启动时间较之<code>BeanFactory</code>也会长一些。在那些系统资源充足，并且要求更多功能的场景中，<code>ApplicationContext</code>类型的容器是比较合适的选择。</li></ul><p>四种方式：</p><ul><li>通过最基本的文本文件来记录被注入对象和其依赖对象之间的对应关系</li><li><strong>通过描述性较强的XML文件格式来记录对应信息</strong></li><li>通过编写代码的方式来注册这些对应信息</li><li><strong>通过注解方式来注册这些对应信息</strong></li></ul><h2 id="Spring-IoC优势"><a href="#Spring-IoC优势" class="headerlink" title="Spring IoC优势"></a>Spring IoC优势</h2><p>AOP抽象、事务抽象、事件扩展、SPI扩展、强大的第三方整合、易测试性、更好的面向对象</p><h2 id="Spring-Ioc容器启动时做了哪些准备？"><a href="#Spring-Ioc容器启动时做了哪些准备？" class="headerlink" title="Spring Ioc容器启动时做了哪些准备？"></a><strong>Spring Ioc容器启动时做了哪些准备？</strong></h2><p>IoC配置元信息读取和解析、容器生命周期、Spring事件发布、国际化等。</p><h2 id="bean的依赖注入DI"><a href="#bean的依赖注入DI" class="headerlink" title="bean的依赖注入DI"></a>bean的依赖注入DI</h2><p>DI存在两个主要变体：基于有参构造注入和基于Setter注入。</p><figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment">//有参构造</span></span><br><span class="line"><span class="keyword">public</span> <span class="class"><span class="keyword">class</span> <span class="title">SimpleMovieLister</span> </span>&#123;</span><br><span class="line"></span><br><span class="line">    <span class="keyword">private</span> MovieFinder movieFinder;</span><br><span class="line"></span><br><span class="line">    <span class="function"><span class="keyword">public</span> <span class="title">SimpleMovieLister</span><span class="params">(MovieFinder movieFinder)</span> </span>&#123;</span><br><span class="line">        <span class="keyword">this</span>.movieFinder = movieFinder;</span><br><span class="line">    &#125;</span><br><span class="line">&#125;</span><br><span class="line"><span class="comment">//基于Setter注入</span></span><br><span class="line"><span class="keyword">public</span> <span class="class"><span class="keyword">class</span> <span class="title">SimpleMovieLister</span> </span>&#123;</span><br><span class="line"></span><br><span class="line">    <span class="keyword">private</span> MovieFinder movieFinder;</span><br><span class="line"></span><br><span class="line">    <span class="function"><span class="keyword">public</span> <span class="keyword">void</span> <span class="title">setMovieFinder</span><span class="params">(MovieFinder movieFinder)</span> </span>&#123;</span><br><span class="line">        <span class="keyword">this</span>.movieFinder = movieFinder;</span><br><span class="line">    &#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure><h2 id="bean的自动装配"><a href="#bean的自动装配" class="headerlink" title="bean的自动装配"></a>bean的自动装配</h2><p> @Autowire按照类型装配和@Resource按照名称装配的注解</p>]]></content>
       
       
       <categories>
@@ -25,6 +25,87 @@
             <tag> IoC </tag>
             
             <tag> DI </tag>
+            
+        </tags>
+      
+    </entry>
+    
+    
+    
+    <entry>
+      <title>批量数据插入效率降低</title>
+      <link href="/2020/01/10/%E6%89%B9%E9%87%8F%E6%95%B0%E6%8D%AE%E6%8F%92%E5%85%A5%E6%95%88%E7%8E%87%E9%99%8D%E4%BD%8E/"/>
+      <url>/2020/01/10/%E6%89%B9%E9%87%8F%E6%95%B0%E6%8D%AE%E6%8F%92%E5%85%A5%E6%95%88%E7%8E%87%E9%99%8D%E4%BD%8E/</url>
+      
+        <content type="html"><![CDATA[<h1 id="全局分析"><a href="#全局分析" class="headerlink" title="全局分析"></a>全局分析</h1><blockquote><p>百万级的数据，如果串行处理，内存一直耗着，没处理完的话，超过内存的物理极限，肯定会发生内存溢出的。百万级数据如果是分多个批次，多个线程并发批量处理，百万级数据分多次使用内存，多次快速释放内存，并且从架构的多个层面(数据库参数调优，sql调优，数据库连接池调优，多线程并发调优，甚至容器调优等等)优化性能，所以单台服务器处理百万数据，也可以做到内存不溢出的。另外，还要注意一个问题，多线程适合于处理一些量大而又小的逻辑，这样的话，可以快速处理批量数据，快速释放内存。如果用多线程并发处理量大而且又是耗时的大逻辑，同样也会发生内存溢出的。建议在性能优化过程中，多压测，多调优</p></blockquote><h2 id="由索引造成的插入效率降低"><a href="#由索引造成的插入效率降低" class="headerlink" title="由索引造成的插入效率降低"></a>由索引造成的插入效率降低</h2><h3 id="主码"><a href="#主码" class="headerlink" title="主码"></a>主码</h3><p>由于主码是每张表必须有的，不能删除。而mysql会对主码自动建立一个索引，这个索引默认是Btree索引，因此每次插入数据要额外的对Btree进行一次插入。这个额外的插入时间复杂度约为log(n)。这个索引无法删除，因此无法优化。但是每次插入的时候，由于主码约束需要检查主码是否出现，这又需要log(n)，能否减少这个开销呢？答案是肯定的。我们可以设置主码为自增id  AUTO_INCREMENT ,这样数据库里会自动记录当前的自增值，保证不会插入重复的主码，也就避免了主码的重复性检查。</p><h3 id="外码"><a href="#外码" class="headerlink" title="外码"></a>外码</h3><p>由于我的项目的插入表中存在外码，因此每次插入时需要在另一张表检测外码存在性。这个约束是与业务逻辑相关的，不能随便删除。并且这个时间开销应当是与另一张表大小成正比的常数，不应当越插入越慢才对。所以排除。</p><h3 id="索引"><a href="#索引" class="headerlink" title="索引"></a>索引</h3><p>为了减少Btree插入的时间损耗，我们可以在建表时先不建索引，先将所有的数据插入。之后我们再向表里添加索引。该方法确实也降低了时间的开销。</p>]]></content>
+      
+      
+      <categories>
+          
+          <category> 故障排查 </category>
+          
+      </categories>
+      
+      
+        <tags>
+            
+            <tag> 故障 </tag>
+            
+            <tag> 分析 </tag>
+            
+        </tags>
+      
+    </entry>
+    
+    
+    
+    <entry>
+      <title>linux搭建ftp服务器</title>
+      <link href="/2019/04/09/linux%E6%90%AD%E5%BB%BAftp%E6%9C%8D%E5%8A%A1%E5%99%A8/"/>
+      <url>/2019/04/09/linux%E6%90%AD%E5%BB%BAftp%E6%9C%8D%E5%8A%A1%E5%99%A8/</url>
+      
+        <content type="html"><![CDATA[<figure class="highlight sh"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br></pre></td><td class="code"><pre><span class="line">$ sudo mkdir /vat/ftp/write</span><br><span class="line">$ sudo chmod -R 777 /var/ftp/write</span><br><span class="line"><span class="comment">#修改vsftp的配置文件</span></span><br><span class="line">$ vi /etc/vsftpd/vsftpd.conf</span><br><span class="line"></span><br><span class="line"><span class="comment">#在最后添加一行</span></span><br><span class="line">local_root=/var/ftp</span><br><span class="line">    </span><br><span class="line"><span class="comment">#保存，重启ftp</span></span><br><span class="line">$ service vsftpd restart</span><br></pre></td></tr></table></figure>]]></content>
+      
+      
+      <categories>
+          
+          <category> linux </category>
+          
+      </categories>
+      
+      
+        <tags>
+            
+            <tag> linux </tag>
+            
+            <tag> ftp </tag>
+            
+        </tags>
+      
+    </entry>
+    
+    
+    
+    <entry>
+      <title>分布式日志系统ELK搭建</title>
+      <link href="/2018/06/07/%E5%88%86%E5%B8%83%E5%BC%8F%E6%97%A5%E5%BF%97%E7%B3%BB%E7%BB%9FELK%E6%90%AD%E5%BB%BA/"/>
+      <url>/2018/06/07/%E5%88%86%E5%B8%83%E5%BC%8F%E6%97%A5%E5%BF%97%E7%B3%BB%E7%BB%9FELK%E6%90%AD%E5%BB%BA/</url>
+      
+        <content type="html"><![CDATA[<blockquote><p>ELK：Elasticsearch  Logstash Kibana</p><p>Elasticsearch：是基于JSON的分布式搜索和分析引擎，专为实现水平扩展、高可用和管理便捷性而设计</p><p>Logstash：是动态数据收集管道，拥有可扩展的插件生态系统</p><p>Kibana：能够已图形化呈现数据，并且具有可扩展的用户界面</p><p>官网：<a href="http://www.elastic.co" target="_blank" rel="noopener">www.elastic.co</a></p></blockquote><h2 id="自行安装好JDK环境"><a href="#自行安装好JDK环境" class="headerlink" title="自行安装好JDK环境"></a>自行安装好JDK环境</h2><h2 id="从官网下载这三款产品"><a href="#从官网下载这三款产品" class="headerlink" title="从官网下载这三款产品"></a>从官网下载这三款产品</h2><p>这里我选择的是.tar.gz文件</p><h2 id="解压文件"><a href="#解压文件" class="headerlink" title="解压文件"></a>解压文件</h2><p>创建文件夹：/home/holder/zoo/elastic/ （略）</p><p>先进入需要解压的文件夹</p><p>解压Elasticsearch</p><figure class="highlight sh"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">$ sudo tar -zxvf elasticsearch-6.2.4.tar.gz -C /home/holder/zoo/elastic/</span><br></pre></td></tr></table></figure><p>解压Logstash</p><figure class="highlight shell"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line"><span class="meta">$</span><span class="bash"> sudo tar -zxvf logstash-6.2.4.tar.gz -C /home/holder/zoo/elastic/</span></span><br></pre></td></tr></table></figure><p>解压Kibana</p><figure class="highlight sh"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">$ sudo tar -zxvf kibana-6.2.4.tar.gz -C /home/holder/zoo/elastic/</span><br></pre></td></tr></table></figure><h2 id="赋予文件夹权限"><a href="#赋予文件夹权限" class="headerlink" title="赋予文件夹权限"></a>赋予文件夹权限</h2><p>此处我们的用户是holder，根据自己的来</p><figure class="highlight sh"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">$ sudo chown -R holder /home/holder/zoo/elastic</span><br></pre></td></tr></table></figure><h2 id="启动服务"><a href="#启动服务" class="headerlink" title="启动服务"></a>启动服务</h2><p>进入各自的文件夹下</p><p>启动Elasticsearc</p><figure class="highlight sh"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">$ bin/elasticsearch</span><br></pre></td></tr></table></figure><p><img src="https://images2018.cnblogs.com/blog/757779/201806/757779-20180607133055475-310236954.png" alt="img"></p><p>浏览器中输入127.0.0.1:9200查看状态</p><p><img src="https://images2018.cnblogs.com/blog/757779/201806/757779-20180607132814688-1041159607.png" alt="img"></p><p>启动Logstash<br>指定启动配置文件</p><p>在config文件夹下加入我们指定规则的配置文件（此处我们使用略了tcp方式输入，elasticsearch方式输出）</p><p><img src="https://images2018.cnblogs.com/blog/757779/201806/757779-20180608134355103-760783491.png" alt="img"></p><figure class="highlight sh"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">$ bin/logstash -f /home/holder/zoo/elastic/logstash-6.2.4/config/test.conf</span><br></pre></td></tr></table></figure><p><img src="https://images2018.cnblogs.com/blog/757779/201806/757779-20180607151754634-460309215.png" alt="img"></p><p>启动Kibana</p><figure class="highlight sh"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">$ bin/kibana</span><br></pre></td></tr></table></figure><p><img src="https://images2018.cnblogs.com/blog/757779/201806/757779-20180607133444767-1774840365.png" alt="img"></p>]]></content>
+      
+      
+      <categories>
+          
+          <category> 中间件 </category>
+          
+      </categories>
+      
+      
+        <tags>
+            
+            <tag> 分布式 </tag>
+            
+            <tag> 日志 </tag>
             
         </tags>
       

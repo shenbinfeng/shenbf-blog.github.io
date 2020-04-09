@@ -2,9 +2,9 @@
 <html>
 <head>
   <meta charset="utf-8">
-  <title>Hexo</title>
-  <meta name="keywords" content="">
-  <meta name="description" content="Hexo">
+  <title>分布式日志系统ELK搭建 | Hexo</title>
+  <meta name="keywords" content=" 分布式 , 日志 ">
+  <meta name="description" content="分布式日志系统ELK搭建 | Hexo">
     <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1">
 <meta name="description" content="IOC和DI的概念 IOC：Inverse of Control，控制反转，将对象的创建反转给spring  DI：Dependency Injection，依赖注入，在spring框架负责创建Bean对象时，动态的将对象注入到Bean组件   Spring IoC总览&#96;Spring的IoC&#96;容器在实现控制反转和依赖注入的过程中,可以划分为两个阶段:  容器启动阶段 Bean实例化阶段  这两个阶">
 <meta property="og:type" content="article">
@@ -58,7 +58,7 @@
 </div>
 
 <body>
-<aside class="nav mobile">
+<aside class="nav">
     <div class="nav-left">
         <a href="/" class="avatar_target">
     <img class="avatar" src="/img/avatar.jpg" />
@@ -271,12 +271,68 @@
         </div>
     </div>
 </aside>
-<div class="post index">
+<div class="post">
     <div class="pjax">
-        <article class="index">
-            <div class="toc-ref">
+        <article id="post-分布式日志系统ELK搭建" class="article article-type-post" itemscope itemprop="blogPost">
     
-        <ol class="toc"><li class="toc-item toc-level-1"><a class="toc-link" href="#This-is-my-blog"><span class="toc-text">This is my blog!</span></a></li></ol>
+        <h1 class="article-title">分布式日志系统ELK搭建</h1>
+    
+    <div class="article-meta">
+        
+        
+        
+        <span class="book">
+            
+                <a  data-rel="中间件">中间件</a>
+            
+        </span>
+        
+        
+        <span class="tag">
+            
+            <a class="color4">分布式</a>
+            
+            <a class="color3">日志</a>
+            
+        </span>
+        
+    </div>
+    <div class="article-meta">
+        
+        创建时间:<time class="date" title='更新时间: 2020-04-09 15:25:18'>2018-06-07 15:08</time>
+        
+    </div>
+    <div class="article-meta">
+        
+        
+        <span id="busuanzi_container_page_pv">
+            阅读:<span id="busuanzi_value_page_pv">
+                <span class="count-comment">
+                    <span class="spinner">
+                      <div class="cube1"></div>
+                      <div class="cube2"></div>
+                    </span>
+                </span>
+            </span>
+        </span>
+        
+        
+        <span class="top-comment" title="跳转至评论区">
+            <a href="#comments">
+                评论:<span class="count-comment">
+                    <span class="spinner">
+                      <div class="cube1"></div>
+                      <div class="cube2"></div>
+                    </span>
+                </span>
+            </a>
+        </span>
+        
+    </div>
+    
+    <div class="toc-ref">
+    
+        <ol class="toc"><li class="toc-item toc-level-2"><a class="toc-link" href="#自行安装好JDK环境"><span class="toc-text">自行安装好JDK环境</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#从官网下载这三款产品"><span class="toc-text">从官网下载这三款产品</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#解压文件"><span class="toc-text">解压文件</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#赋予文件夹权限"><span class="toc-text">赋予文件夹权限</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#启动服务"><span class="toc-text">启动服务</span></a></li></ol>
     
 <style>
     .left-col .switch-btn,
@@ -289,14 +345,74 @@
     }
 </style>
 </div>
-            <h1 id="This-is-my-blog"><a href="#This-is-my-blog" class="headerlink" title="This is my blog!"></a>This is my blog!</h1>
-        </article>
-        
-        <p>
-            <a  class="dashang" onclick="dashangToggle()">赏</a>
-        </p>
-        
-        
+    
+    <div class="article-entry" itemprop="articleBody">
+      
+        <blockquote>
+<p>ELK：Elasticsearch  Logstash Kibana</p>
+<p>Elasticsearch：是基于JSON的分布式搜索和分析引擎，专为实现水平扩展、高可用和管理便捷性而设计</p>
+<p>Logstash：是动态数据收集管道，拥有可扩展的插件生态系统</p>
+<p>Kibana：能够已图形化呈现数据，并且具有可扩展的用户界面</p>
+<p>官网：<a href="http://www.elastic.co" target="_blank" rel="noopener">www.elastic.co</a></p>
+</blockquote>
+<h2 id="自行安装好JDK环境"><a href="#自行安装好JDK环境" class="headerlink" title="自行安装好JDK环境"></a>自行安装好JDK环境</h2><h2 id="从官网下载这三款产品"><a href="#从官网下载这三款产品" class="headerlink" title="从官网下载这三款产品"></a>从官网下载这三款产品</h2><p>这里我选择的是.tar.gz文件</p>
+<h2 id="解压文件"><a href="#解压文件" class="headerlink" title="解压文件"></a>解压文件</h2><p>创建文件夹：/home/holder/zoo/elastic/ （略）</p>
+<p>先进入需要解压的文件夹</p>
+<p>解压Elasticsearch</p>
+<figure class="highlight sh"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">$ sudo tar -zxvf elasticsearch-6.2.4.tar.gz -C /home/holder/zoo/elastic/</span><br></pre></td></tr></table></figure>
+
+<p>解压Logstash</p>
+<figure class="highlight shell"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line"><span class="meta">$</span><span class="bash"> sudo tar -zxvf logstash-6.2.4.tar.gz -C /home/holder/zoo/elastic/</span></span><br></pre></td></tr></table></figure>
+
+<p>解压Kibana</p>
+<figure class="highlight sh"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">$ sudo tar -zxvf kibana-6.2.4.tar.gz -C /home/holder/zoo/elastic/</span><br></pre></td></tr></table></figure>
+
+<h2 id="赋予文件夹权限"><a href="#赋予文件夹权限" class="headerlink" title="赋予文件夹权限"></a>赋予文件夹权限</h2><p>此处我们的用户是holder，根据自己的来</p>
+<figure class="highlight sh"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">$ sudo chown -R holder /home/holder/zoo/elastic</span><br></pre></td></tr></table></figure>
+
+<h2 id="启动服务"><a href="#启动服务" class="headerlink" title="启动服务"></a>启动服务</h2><p>进入各自的文件夹下</p>
+<p>启动Elasticsearc</p>
+<figure class="highlight sh"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">$ bin/elasticsearch</span><br></pre></td></tr></table></figure>
+
+<p><img src="https://images2018.cnblogs.com/blog/757779/201806/757779-20180607133055475-310236954.png" alt="img"></p>
+<p>浏览器中输入127.0.0.1:9200查看状态</p>
+<p><img src="https://images2018.cnblogs.com/blog/757779/201806/757779-20180607132814688-1041159607.png" alt="img"></p>
+<p>启动Logstash<br>指定启动配置文件</p>
+<p>在config文件夹下加入我们指定规则的配置文件（此处我们使用略了tcp方式输入，elasticsearch方式输出）</p>
+<p><img src="https://images2018.cnblogs.com/blog/757779/201806/757779-20180608134355103-760783491.png" alt="img"></p>
+<figure class="highlight sh"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">$ bin/logstash -f /home/holder/zoo/elastic/logstash-6.2.4/config/test.conf</span><br></pre></td></tr></table></figure>
+
+<p><img src="https://images2018.cnblogs.com/blog/757779/201806/757779-20180607151754634-460309215.png" alt="img"></p>
+<p>启动Kibana</p>
+<figure class="highlight sh"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">$ bin/kibana</span><br></pre></td></tr></table></figure>
+
+<p><img src="https://images2018.cnblogs.com/blog/757779/201806/757779-20180607133444767-1774840365.png" alt="img"></p>
+
+      
+       <hr><span style="font-style: italic;color: gray;"> 转载请注明来源，欢迎对文章中的引用来源进行考证，欢迎指出任何有错误或不够清晰的表达。可以在下面评论区评论，也可以邮件至 822469306@qq.com </span>
+    </div>
+</article>
+
+
+<p>
+    <a  class="dashang" onclick="dashangToggle()">赏</a>
+</p>
+
+
+<div class="article_copyright">
+    <p><span class="copy-title">文章标题:</span>分布式日志系统ELK搭建</p>
+    
+    <p><span class="copy-title">本文作者:</span><a  title="Shenbinfeng">Shenbinfeng</a></p>
+    <p><span class="copy-title">发布时间:</span>2018-06-07, 15:08:00</p>
+    <p><span class="copy-title">最后更新:</span>2020-04-09, 15:25:18</p>
+    <span class="copy-title">原始链接:</span><a class="post-url" href="/2018/06/07/%E5%88%86%E5%B8%83%E5%BC%8F%E6%97%A5%E5%BF%97%E7%B3%BB%E7%BB%9FELK%E6%90%AD%E5%BB%BA/" title="分布式日志系统ELK搭建">https://github.com/shenbinfeng/2018/06/07/%E5%88%86%E5%B8%83%E5%BC%8F%E6%97%A5%E5%BF%97%E7%B3%BB%E7%BB%9FELK%E6%90%AD%E5%BB%BA/</a>
+    <p>
+        <span class="copy-title">版权声明:</span><i class="fa fa-creative-commons"></i> <a rel="license noopener" href="http://creativecommons.org/licenses/by-nc-sa/4.0/" target="_blank" title="CC BY-NC-SA 4.0 International" target = "_blank">"署名-非商用-相同方式共享 4.0"</a> 转载请保留原文链接及作者。
+    </p>
+</div>
+
+
+
     <div id="comments"></div>
 <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/gitalk@1/dist/gitalk.css">
 
@@ -316,6 +432,13 @@
         gitalk.render('comments')
     })
 </script>
+
+
+
+
+    
+
+
 
 
     </div>

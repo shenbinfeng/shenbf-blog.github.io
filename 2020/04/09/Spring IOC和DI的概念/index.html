@@ -2,9 +2,9 @@
 <html>
 <head>
   <meta charset="utf-8">
-  <title>Hexo</title>
-  <meta name="keywords" content="">
-  <meta name="description" content="Hexo">
+  <title>Spring IOC和DI的概念 | Hexo</title>
+  <meta name="keywords" content=" Spring , IoC , DI ">
+  <meta name="description" content="Spring IOC和DI的概念 | Hexo">
     <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1">
 <meta name="description" content="IOC和DI的概念 IOC：Inverse of Control，控制反转，将对象的创建反转给spring  DI：Dependency Injection，依赖注入，在spring框架负责创建Bean对象时，动态的将对象注入到Bean组件   Spring IoC总览&#96;Spring的IoC&#96;容器在实现控制反转和依赖注入的过程中,可以划分为两个阶段:  容器启动阶段 Bean实例化阶段  这两个阶">
 <meta property="og:type" content="article">
@@ -58,7 +58,7 @@
 </div>
 
 <body>
-<aside class="nav mobile">
+<aside class="nav">
     <div class="nav-left">
         <a href="/" class="avatar_target">
     <img class="avatar" src="/img/avatar.jpg" />
@@ -271,12 +271,70 @@
         </div>
     </div>
 </aside>
-<div class="post index">
+<div class="post">
     <div class="pjax">
-        <article class="index">
-            <div class="toc-ref">
+        <article id="post-Spring IOC和DI的概念" class="article article-type-post" itemscope itemprop="blogPost">
     
-        <ol class="toc"><li class="toc-item toc-level-1"><a class="toc-link" href="#This-is-my-blog"><span class="toc-text">This is my blog!</span></a></li></ol>
+        <h1 class="article-title">Spring IOC和DI的概念</h1>
+    
+    <div class="article-meta">
+        
+        
+        
+        <span class="book">
+            
+                <a  data-rel="Spring">Spring</a>
+            
+        </span>
+        
+        
+        <span class="tag">
+            
+            <a class="color2">Spring</a>
+            
+            <a class="color4">IoC</a>
+            
+            <a class="color3">DI</a>
+            
+        </span>
+        
+    </div>
+    <div class="article-meta">
+        
+        创建时间:<time class="date" title='更新时间: 2020-04-09 14:29:19'>2020-04-09 12:04</time>
+        
+    </div>
+    <div class="article-meta">
+        
+        
+        <span id="busuanzi_container_page_pv">
+            阅读:<span id="busuanzi_value_page_pv">
+                <span class="count-comment">
+                    <span class="spinner">
+                      <div class="cube1"></div>
+                      <div class="cube2"></div>
+                    </span>
+                </span>
+            </span>
+        </span>
+        
+        
+        <span class="top-comment" title="跳转至评论区">
+            <a href="#comments">
+                评论:<span class="count-comment">
+                    <span class="spinner">
+                      <div class="cube1"></div>
+                      <div class="cube2"></div>
+                    </span>
+                </span>
+            </a>
+        </span>
+        
+    </div>
+    
+    <div class="toc-ref">
+    
+        <ol class="toc"><li class="toc-item toc-level-1"><a class="toc-link" href="#IOC和DI的概念"><span class="toc-text">IOC和DI的概念</span></a><ol class="toc-child"><li class="toc-item toc-level-2"><a class="toc-link" href="#Spring-IoC总览"><span class="toc-text">Spring IoC总览&#96;</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#Spring-IoC优势"><span class="toc-text">Spring IoC优势</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#Spring-Ioc容器启动时做了哪些准备？"><span class="toc-text">Spring Ioc容器启动时做了哪些准备？</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#bean的依赖注入DI"><span class="toc-text">bean的依赖注入DI</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#bean的自动装配"><span class="toc-text">bean的自动装配</span></a></li></ol></li></ol>
     
 <style>
     .left-col .switch-btn,
@@ -289,14 +347,76 @@
     }
 </style>
 </div>
-            <h1 id="This-is-my-blog"><a href="#This-is-my-blog" class="headerlink" title="This is my blog!"></a>This is my blog!</h1>
-        </article>
-        
-        <p>
-            <a  class="dashang" onclick="dashangToggle()">赏</a>
-        </p>
-        
-        
+    
+    <div class="article-entry" itemprop="articleBody">
+      
+        <h1 id="IOC和DI的概念"><a href="#IOC和DI的概念" class="headerlink" title="IOC和DI的概念"></a>IOC和DI的概念</h1><ul>
+<li><p>IOC：Inverse of Control，控制反转，将对象的创建反转给spring</p>
+</li>
+<li><p>DI：Dependency Injection，依赖注入，在spring框架负责创建Bean对象时，动态的将对象注入到Bean组件</p>
+</li>
+</ul>
+<h2 id="Spring-IoC总览"><a href="#Spring-IoC总览" class="headerlink" title="Spring IoC总览`"></a>Spring IoC总览`</h2><p>Spring<code>的</code>IoC`容器在实现控制反转和依赖注入的过程中,可以划分为两个阶段:</p>
+<ul>
+<li>容器启动阶段</li>
+<li><code>Bean</code>实例化阶段</li>
+</ul>
+<p>这两个阶段中,<code>IoC</code>容器分别作了以下这些事情:</p>
+<img src="/2020/04/09/Spring%20IOC%E5%92%8CDI%E7%9A%84%E6%A6%82%E5%BF%B5/1.webp" class title="This is an test image">
+
+<p><code>Spring</code>中提供了两种<code>IoC</code>容器：</p>
+<ul>
+<li><code>BeanFactory</code></li>
+<li><code>ApplicationContext</code></li>
+</ul>
+<p>这两个容器间的关系如下图：</p>
+<img src="/2020/04/09/Spring%20IOC%E5%92%8CDI%E7%9A%84%E6%A6%82%E5%BF%B5/2.jpg" class title="This is an test image">
+
+
+<p> 我们可以看到，<code>ApplicationContext</code>是<code>BeanFactory</code>的子类，所以，<code>ApplicationContext</code>可以看做更强大的<code>BeanFactory</code>，他们两个之间的区别如下：</p>
+<ul>
+<li><code>BeanFactory</code>。基础类型<code>IoC容器</code>，提供完整的<code>IoC</code>服务支持。如果没有特殊指定，默认采用延迟初始化策略（<code>lazy-load</code>）。只有当客户端对象需要访问容器中的某个受管对象的时候，才对该受管对象进行初始化以及依赖注入操作。所以，相对来说，容器启动初期速度较快，所需要的资源有限。对于资源有限，并且功能要求不是很严格的场景，<code>BeanFactory</code>是比较合适的<code>IoC容器</code>选择。</li>
+<li><code>ApplicationContext</code>。<code>ApplicationContext</code>在<code>BeanFactory</code>的基础上构建，是相对比较高级的容器实现，除了拥有<code>BeanFactory</code>的所有支持，<code>ApplicationContext</code>还提供了其他高级特性，比如事件发布、国际化信息支持等，<code>ApplicationContext</code>所管理的对象，在该类型容器启动之后，默认全部初始化并绑定完成。所以，相对于<code>BeanFactory</code>来说，<code>ApplicationContext</code>要求更多的系统资源，同时，因为在启动时就完成所有初始化，容<br> 器启动时间较之<code>BeanFactory</code>也会长一些。在那些系统资源充足，并且要求更多功能的场景中，<code>ApplicationContext</code>类型的容器是比较合适的选择。</li>
+</ul>
+<p>四种方式：</p>
+<ul>
+<li>通过最基本的文本文件来记录被注入对象和其依赖对象之间的对应关系</li>
+<li><strong>通过描述性较强的XML文件格式来记录对应信息</strong></li>
+<li>通过编写代码的方式来注册这些对应信息</li>
+<li><strong>通过注解方式来注册这些对应信息</strong></li>
+</ul>
+<h2 id="Spring-IoC优势"><a href="#Spring-IoC优势" class="headerlink" title="Spring IoC优势"></a>Spring IoC优势</h2><p>AOP抽象、事务抽象、事件扩展、SPI扩展、强大的第三方整合、易测试性、更好的面向对象</p>
+<h2 id="Spring-Ioc容器启动时做了哪些准备？"><a href="#Spring-Ioc容器启动时做了哪些准备？" class="headerlink" title="Spring Ioc容器启动时做了哪些准备？"></a><strong>Spring Ioc容器启动时做了哪些准备？</strong></h2><p>IoC配置元信息读取和解析、容器生命周期、Spring事件发布、国际化等。</p>
+<h2 id="bean的依赖注入DI"><a href="#bean的依赖注入DI" class="headerlink" title="bean的依赖注入DI"></a>bean的依赖注入DI</h2><p>DI存在两个主要变体：基于有参构造注入和基于Setter注入。</p>
+<figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment">//有参构造</span></span><br><span class="line"><span class="keyword">public</span> <span class="class"><span class="keyword">class</span> <span class="title">SimpleMovieLister</span> </span>&#123;</span><br><span class="line"></span><br><span class="line">    <span class="keyword">private</span> MovieFinder movieFinder;</span><br><span class="line"></span><br><span class="line">    <span class="function"><span class="keyword">public</span> <span class="title">SimpleMovieLister</span><span class="params">(MovieFinder movieFinder)</span> </span>&#123;</span><br><span class="line">        <span class="keyword">this</span>.movieFinder = movieFinder;</span><br><span class="line">    &#125;</span><br><span class="line">&#125;</span><br><span class="line"><span class="comment">//基于Setter注入</span></span><br><span class="line"><span class="keyword">public</span> <span class="class"><span class="keyword">class</span> <span class="title">SimpleMovieLister</span> </span>&#123;</span><br><span class="line"></span><br><span class="line">    <span class="keyword">private</span> MovieFinder movieFinder;</span><br><span class="line"></span><br><span class="line">    <span class="function"><span class="keyword">public</span> <span class="keyword">void</span> <span class="title">setMovieFinder</span><span class="params">(MovieFinder movieFinder)</span> </span>&#123;</span><br><span class="line">        <span class="keyword">this</span>.movieFinder = movieFinder;</span><br><span class="line">    &#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+
+<h2 id="bean的自动装配"><a href="#bean的自动装配" class="headerlink" title="bean的自动装配"></a>bean的自动装配</h2><p> @Autowire按照类型装配和@Resource按照名称装配的注解</p>
+
+      
+       <hr><span style="font-style: italic;color: gray;"> 转载请注明来源，欢迎对文章中的引用来源进行考证，欢迎指出任何有错误或不够清晰的表达。可以在下面评论区评论，也可以邮件至 822469306@qq.com </span>
+    </div>
+</article>
+
+
+<p>
+    <a  class="dashang" onclick="dashangToggle()">赏</a>
+</p>
+
+
+<div class="article_copyright">
+    <p><span class="copy-title">文章标题:</span>Spring IOC和DI的概念</p>
+    
+    <p><span class="copy-title">本文作者:</span><a  title="Shenbinfeng">Shenbinfeng</a></p>
+    <p><span class="copy-title">发布时间:</span>2020-04-09, 12:04:00</p>
+    <p><span class="copy-title">最后更新:</span>2020-04-09, 14:29:19</p>
+    <span class="copy-title">原始链接:</span><a class="post-url" href="/2020/04/09/Spring%20IOC%E5%92%8CDI%E7%9A%84%E6%A6%82%E5%BF%B5/" title="Spring IOC和DI的概念">https://github.com/shenbinfeng/2020/04/09/Spring%20IOC%E5%92%8CDI%E7%9A%84%E6%A6%82%E5%BF%B5/</a>
+    <p>
+        <span class="copy-title">版权声明:</span><i class="fa fa-creative-commons"></i> <a rel="license noopener" href="http://creativecommons.org/licenses/by-nc-sa/4.0/" target="_blank" title="CC BY-NC-SA 4.0 International" target = "_blank">"署名-非商用-相同方式共享 4.0"</a> 转载请保留原文链接及作者。
+    </p>
+</div>
+
+
+
     <div id="comments"></div>
 <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/gitalk@1/dist/gitalk.css">
 
@@ -316,6 +436,13 @@
         gitalk.render('comments')
     })
 </script>
+
+
+
+
+    
+
+
 
 
     </div>
