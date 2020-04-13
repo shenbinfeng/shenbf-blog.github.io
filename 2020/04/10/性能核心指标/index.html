@@ -2,9 +2,9 @@
 <html>
 <head>
   <meta charset="utf-8">
-  <title>批量数据插入效率降低 | 头还没秃，我还不够强</title>
-  <meta name="keywords" content=" 故障 , 分析 ">
-  <meta name="description" content="批量数据插入效率降低 | 头还没秃，我还不够强">
+  <title>性能核心指标 | 头还没秃，我还不够强</title>
+  <meta name="keywords" content=" 性能 ">
+  <meta name="description" content="性能核心指标 | 头还没秃，我还不够强">
     <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1">
 <meta name="description" content="1.什么是 TPS ？即 Transactions Per Second 的缩写，每秒处理的事务数目。一个事务是指一个客户机向服务器发送请求然后服务器做出反应的过程。客户机在发送请求时开始计时，收到服务器响应后结束计时，以此来计算使用的时间和完成的事务个数，最终利用这些信息作出的评估分。 一个事务可能对应多个请求，这与数据库的事务操作极其相似。 2.什么是 QPS ？Queries Per Sec">
 <meta property="og:type" content="article">
@@ -288,9 +288,9 @@
 </aside>
 <div class="post">
     <div class="pjax">
-        <article id="post-批量数据插入效率降低" class="article article-type-post" itemscope itemprop="blogPost">
+        <article id="post-性能核心指标" class="article article-type-post" itemscope itemprop="blogPost">
     
-        <h1 class="article-title">批量数据插入效率降低</h1>
+        <h1 class="article-title">性能核心指标</h1>
     
     <div class="article-meta">
         
@@ -298,23 +298,21 @@
         
         <span class="book">
             
-                <a  data-rel="故障排查">故障排查</a>
+                <a  data-rel="测试">测试</a>
             
         </span>
         
         
         <span class="tag">
             
-            <a class="color3">故障</a>
-            
-            <a class="color3">分析</a>
+            <a class="color3">性能</a>
             
         </span>
         
     </div>
     <div class="article-meta">
         
-        创建时间:<time class="date" title='更新时间: 2020-04-09 15:05:01'>2020-01-10 14:50</time>
+        创建时间:<time class="date" title='更新时间: 2020-04-10 12:05:06'>2020-04-10 11:59</time>
         
     </div>
     <div class="article-meta">
@@ -347,7 +345,7 @@
     
     <div class="toc-ref">
     
-        <ol class="toc"><li class="toc-item toc-level-1"><a class="toc-link" href="#全局分析"><span class="toc-text">全局分析</span></a><ol class="toc-child"><li class="toc-item toc-level-2"><a class="toc-link" href="#由索引造成的插入效率降低"><span class="toc-text">由索引造成的插入效率降低</span></a><ol class="toc-child"><li class="toc-item toc-level-3"><a class="toc-link" href="#主码"><span class="toc-text">主码</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#外码"><span class="toc-text">外码</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#索引"><span class="toc-text">索引</span></a></li></ol></li></ol></li></ol>
+        <ol class="toc"><li class="toc-item toc-level-4"><a class="toc-link" href="#QPS-如何计算？"><span class="toc-text">QPS 如何计算？</span></a></li></ol>
     
 <style>
     .left-col .switch-btn,
@@ -363,12 +361,20 @@
     
     <div class="article-entry" itemprop="articleBody">
       
-        <h1 id="全局分析"><a href="#全局分析" class="headerlink" title="全局分析"></a>全局分析</h1><blockquote>
-<p>百万级的数据，如果串行处理，内存一直耗着，没处理完的话，超过内存的物理极限，肯定会发生内存溢出的。百万级数据如果是分多个批次，多个线程并发批量处理，百万级数据分多次使用内存，多次快速释放内存，并且从架构的多个层面(数据库参数调优，sql调优，数据库连接池调优，多线程并发调优，甚至容器调优等等)优化性能，所以单台服务器处理百万数据，也可以做到内存不溢出的。另外，还要注意一个问题，多线程适合于处理一些量大而又小的逻辑，这样的话，可以快速处理批量数据，快速释放内存。如果用多线程并发处理量大而且又是耗时的大逻辑，同样也会发生内存溢出的。建议在性能优化过程中，多压测，多调优</p>
+        <p>1.什么是 <code>TPS</code> ？<br>即 <code>Transactions Per Second</code> 的缩写，每秒处理的事务数目。一个事务是指一个客户机向服务器发送请求然后服务器做出反应的过程。客户机在发送请求时开始计时，收到服务器响应后结束计时，以此来计算使用的时间和完成的事务个数，最终利用这些信息作出的评估分。</p>
+<p>一个事务可能对应多个请求，这与数据库的事务操作极其相似。</p>
+<p>2.什么是 <code>QPS</code> ？<br><code>Queries Per Second</code> 的缩写，每秒能处理查询数目，是对一个特定的查询服务器在规定时间内所处理流量多少的衡量标准。</p>
+<p><strong>需要注意的是</strong>：虽然名义上是查询的意思，但实际上，现在习惯于对单一接口服务的处理能力用 <code>QPS</code> 进行表述（即使它并不是查询操作）。</p>
+<p>3.什么是 <code>RT</code> ？<br>响应时间，处理一次请求所需要的平均处理时间。我们一般会关注 <code>90th</code> 请求的的处理时间，因为可能因网络情况出现极端情况，长尾数据会对我们产生干扰。</p>
+<p>4.系统 <code>CPU</code> 利用率<br>如果系统的 <code>CPU</code> 使用率已经很高，说明我们的系统是个计算度很复杂的系统，这时候如果 <code>QPS</code> 已经上不去了，就需要赶紧扩容，通过增加机器分担计算的方式来提高系统的吞吐量。</p>
+<p>5.系统内存<br>如果 <code>CPU</code> 使用率一般，但是系统的 <code>QPS</code> 上不去，说明我们的机器并没有忙于计算，而是受到其他资源的限制，如内存、<code>I/O</code>。这时候首先看下内存是不是已经不够了，如果内存不够了，那就赶紧扩容了。</p>
+<h4 id="QPS-如何计算？"><a href="#QPS-如何计算？" class="headerlink" title="QPS 如何计算？"></a>QPS 如何计算？</h4><p><code>QPS</code> 并没有准确的计算公式，但是实际压测中我们完全可以按照如下模型进行估算：</p>
+<blockquote>
+<p>原理：每天 80% 的访问集中在 20% 的时间里，这 20% 时间叫做「峰值时间」。</p>
 </blockquote>
-<h2 id="由索引造成的插入效率降低"><a href="#由索引造成的插入效率降低" class="headerlink" title="由索引造成的插入效率降低"></a>由索引造成的插入效率降低</h2><h3 id="主码"><a href="#主码" class="headerlink" title="主码"></a>主码</h3><p>由于主码是每张表必须有的，不能删除。而mysql会对主码自动建立一个索引，这个索引默认是Btree索引，因此每次插入数据要额外的对Btree进行一次插入。这个额外的插入时间复杂度约为log(n)。这个索引无法删除，因此无法优化。但是每次插入的时候，由于主码约束需要检查主码是否出现，这又需要log(n)，能否减少这个开销呢？答案是肯定的。我们可以设置主码为自增id  AUTO_INCREMENT ,这样数据库里会自动记录当前的自增值，保证不会插入重复的主码，也就避免了主码的重复性检查。</p>
-<h3 id="外码"><a href="#外码" class="headerlink" title="外码"></a>外码</h3><p>由于我的项目的插入表中存在外码，因此每次插入时需要在另一张表检测外码存在性。这个约束是与业务逻辑相关的，不能随便删除。并且这个时间开销应当是与另一张表大小成正比的常数，不应当越插入越慢才对。所以排除。</p>
-<h3 id="索引"><a href="#索引" class="headerlink" title="索引"></a>索引</h3><p>为了减少Btree插入的时间损耗，我们可以在建表时先不建索引，先将所有的数据插入。之后我们再向表里添加索引。该方法确实也降低了时间的开销。</p>
+<p>公式：( 总 <code>PV</code> 数 <em><code>80%</code> ) / ( 每天秒数</em> <code>20%</code> ) = 峰值时间每秒请求数(<code>QPS</code>)<br>机器：峰值时间每秒 <code>QPS</code> / 单台机器的 <code>QPS</code> = 需要的机器</p>
+<p>问：每天 <code>300w PV</code> 的在单台机器上，这台机器需要多少 <code>QPS</code>？<br>答：<code>( 3000000 * 0.8 ) / (86400 * 0.2 ) = 139 (QPS)</code></p>
+<p>问：如果一台机器的 <code>QPS</code> 是 <code>58</code> ，需要几台机器来支持？<br>答：<code>139 / 58 = 3</code></p>
 
       
        <hr><span style="font-style: italic;color: gray;"> 转载请注明来源，欢迎对文章中的引用来源进行考证，欢迎指出任何有错误或不够清晰的表达。可以在下面评论区评论，也可以邮件至 822469306@qq.com </span>
@@ -382,12 +388,12 @@
 
 
 <div class="article_copyright">
-    <p><span class="copy-title">文章标题:</span>批量数据插入效率降低</p>
+    <p><span class="copy-title">文章标题:</span>性能核心指标</p>
     
     <p><span class="copy-title">本文作者:</span><a  title="Shenbinfeng">Shenbinfeng</a></p>
-    <p><span class="copy-title">发布时间:</span>2020-01-10, 14:50:00</p>
-    <p><span class="copy-title">最后更新:</span>2020-04-09, 15:05:01</p>
-    <span class="copy-title">原始链接:</span><a class="post-url" href="/2020/01/10/%E6%89%B9%E9%87%8F%E6%95%B0%E6%8D%AE%E6%8F%92%E5%85%A5%E6%95%88%E7%8E%87%E9%99%8D%E4%BD%8E/" title="批量数据插入效率降低">https://github.com/shenbinfeng/2020/01/10/%E6%89%B9%E9%87%8F%E6%95%B0%E6%8D%AE%E6%8F%92%E5%85%A5%E6%95%88%E7%8E%87%E9%99%8D%E4%BD%8E/</a>
+    <p><span class="copy-title">发布时间:</span>2020-04-10, 11:59:00</p>
+    <p><span class="copy-title">最后更新:</span>2020-04-10, 12:05:06</p>
+    <span class="copy-title">原始链接:</span><a class="post-url" href="/2020/04/10/%E6%80%A7%E8%83%BD%E6%A0%B8%E5%BF%83%E6%8C%87%E6%A0%87/" title="性能核心指标">https://github.com/shenbinfeng/2020/04/10/%E6%80%A7%E8%83%BD%E6%A0%B8%E5%BF%83%E6%8C%87%E6%A0%87/</a>
     <p>
         <span class="copy-title">版权声明:</span><i class="fa fa-creative-commons"></i> <a rel="license noopener" href="http://creativecommons.org/licenses/by-nc-sa/4.0/" target="_blank" title="CC BY-NC-SA 4.0 International" target = "_blank">"署名-非商用-相同方式共享 4.0"</a> 转载请保留原文链接及作者。
     </p>
